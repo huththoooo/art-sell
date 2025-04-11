@@ -7,6 +7,50 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <script type="module" src="script.firebase.js"></script>
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCheKQGsyLYn7uubsmsJW0HKGPCnmwhs_c",
+    authDomain: "artsite-b628f.firebaseapp.com",
+    projectId: "artsite-b628f",
+    storageBucket: "artsite-b628f.firebasestorage.app",
+    messagingSenderId: "606907233471",
+    appId: "1:606907233471:web:0a2a0b3729ecad1cab420a",
+    measurementId: "G-YD4H3JR23H"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Load artworks from Firebase
+  document.addEventListener("DOMContentLoaded", async () => {
+    const querySnapshot = await getDocs(collection(db, "artworks"));
+    const galleryGrid = document.querySelector(".gallery-grid");
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+
+      const item = document.createElement("div");
+      item.className = `art-item ${data.category}`;
+      item.innerHTML = `
+        <div class="art-img">
+          <img src="${data.image}" alt="${data.title}">
+        </div>
+        <div class="art-info">
+          <h3>${data.title}</h3>
+          <p class="artist-name">${data.artist}</p>
+          <p class="art-price">$${data.price}</p>
+        </div>
+        <span class="art-category">${data.category}</span>
+      `;
+
+      galleryGrid.appendChild(item);
+    });
+  });
+</script>
 
 </head>
 <body>
